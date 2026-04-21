@@ -8,10 +8,14 @@ const Base_Url="http://localhost:3000/user"
 
 async function checkUser(obj){
     try {
-        const response=await axios.post(`${Base_Url}/login`,obj)
+       const response=await axios.post(`${Base_Url}/login`,obj)
+       const data=response.data
        console.log(response.data.message);
        message.classList.add("loginMessage")
        message.innerText = response.data.message || "login successful";
+       localStorage.setItem("token", data.data.token);
+
+        window.location.href = "expenseTracker.html";
        loginForm.reset(); 
     } catch (error) {
         const errMsg = error.response?.data?.message || "Something went wrong";
@@ -22,11 +26,9 @@ async function checkUser(obj){
 
 loginForm.addEventListener("submit",(e)=>{
     e.preventDefault()
-
     const obj={
         email:emailInput.value,
         password:passwordInput.value
     }
-
     checkUser(obj)
 })
